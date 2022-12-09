@@ -11,8 +11,10 @@ class Director:
     Attributes:
         puzzle (Puzzle): The game's puzzle.
         is_playing (boolean): Whether or not to keep playing.
-        seeker (Seeker): The game's seeker.
+        jumper (Jumperer): The game's jumper.
         terminal_service: For getting and displaying information on the terminal.
+        _answers: list of ansers registerd
+
     """
 
     def __init__(self):
@@ -26,10 +28,11 @@ class Director:
         self._puzzle = Puzzle()
         self._is_playing = True
         self._answers = []
-        self._old_answers = self._puzzle._new_answers
+        
         
     def start_game(self):
         """Starts the game by running the main game loop.
+            Notifies if the game is over and if won or lost. 
         
         Args:
             self (Director): an instance of Director.
@@ -52,34 +55,35 @@ class Director:
         
 
     def _get_inputs(self):
-        # Ask for a letter.
+        """Ask for a letter and stores it.
 
-        # Args:
-        #     self (Director): An instance of Director.
-        
+        Args:
+             self (Director): An instance of Director.
+        """
         letter = self._terminal_service.read_text("\nEnter a letter: ")
-        self._puzzle.pass_letter(letter)
+        self._puzzle.set_letter(letter)
         
     def _do_updates(self):
-    #     """Keeps watch on where the seeker is moving.
+        """adds letters to the answer if they are correct, 
+        and removes parts of the parachute if they are wrong.
 
-    #     Args:
-    #         self (Director): An instance of Director.
-    #     """
+        Args:
+            self (Director): An instance of Director.
+        """
         self._answers = self._puzzle.track_answers()
 
         if self._puzzle.right_answer() == "false":
             self._jumper.update_jumper()
-        elif self._puzzle.right_answer() == "true":
-            self._old_answers = self._answers
+     
         
 
     def _do_outputs(self):
-    #     """Provides a hint for the seeker to use.
+        """prints the puzzle with as many letters found so far. 
+        it also prints the parachute as it looks at the end of the turn.
 
-    #     Args:
-    #         self (Director): An instance of Director.
-    #     """
+        Args:
+            self (Director): An instance of Director.
+        """
         
         self._terminal_service.write_text(self._answers)
         print ()

@@ -28,5 +28,11 @@ class TerminalService:
         print (*text)
 
     def write_jumper(self, text):
-        
+        """Displays the text of a list breaking the line after every separator
+        on the terminal . 
+
+        Args: 
+            self (TerminalService): An instance of TerminalService.
+            text (string): The text to display.
+        """
         print (*text, sep = "\n")
